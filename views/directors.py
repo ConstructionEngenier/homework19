@@ -3,6 +3,7 @@ from flask_restx import Resource, Namespace
 
 from dao.model.director import DirectorSchema
 from implemented import director_service
+from service.auth import auth_required, admin_required
 
 director_ns = Namespace('directors')
 director_schema = DirectorSchema()
@@ -10,6 +11,7 @@ directors_schema = DirectorSchema(many=True)
 
 @director_ns.route('/')
 class DirectorsView(Resource):
+    @auth_required
     def get(self):
         directors = director_service.get_all()
         return directors_schema.dump(directors), 200
@@ -22,6 +24,7 @@ class DirectorsView(Resource):
 
 @director_ns.route('/<int:rid>')
 class DirectorView(Resource):
+    @auth_required
     def get(self, rid):
         director = director_service.get_one(rid)
         if director:
