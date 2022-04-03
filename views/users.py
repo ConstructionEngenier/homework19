@@ -23,7 +23,7 @@ class UsersView(Resource):
         else:
             all_users = user_service.get_all()
         if all_users:
-            return user_schema.dump(all_users), 200
+            return users_schema.dump(all_users), 200
         return "not found", 404
 
     def post(self):
