@@ -3,6 +3,7 @@ from flask_restx import Resource, Namespace, reqparse
 
 from dao.model.user import UserSchema
 from implemented import user_service
+from service.auth import admin_required
 
 user_ns = Namespace('users')
 user_schema = UserSchema()
@@ -16,6 +17,7 @@ parser.add_argument('role', type=str)
 @user_ns.route('/')
 class UsersView(Resource):
     @user_ns.expect(parser)
+    @admin_required
     def get(self):
         req_args = parser.parse_args()
         if any(req_args.values()):
@@ -33,12 +35,14 @@ class UsersView(Resource):
 
 @user_ns.route('/<int:uid>')
 class UserView(Resource):
+    @admin_required
     def get(self, uid: int):
         user = user_service.get_one(uid)
         if user:
             return user_schema.dump(user), 200
         return "", 404
 
+    @admin_required
     def put(self, uid: int):
         req_json = request.json
         if not req_json.get('id'):
@@ -47,6 +51,7 @@ class UserView(Resource):
             return f"Обновленный id: {uid}", 201
         return "not found", 404
 
+    @admin_required
     def delete(self, uid: int):
         if user_service.delete(uid):
             return "", 204

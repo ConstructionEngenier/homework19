@@ -1,3 +1,15 @@
+POST http://127.0.0.1:5000/users/
+Accept: application/json
+Content-Type: application/json
+
+{
+	"username": "ivan",
+	"password": "qwerty",
+	"role": "admin"
+}
+
+###
+
 GET http://127.0.0.1:10001/movies/
 Accept: application/json
 
