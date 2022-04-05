@@ -28,6 +28,12 @@ def register_extensions(app):
     api.add_namespace(auth_ns)
 
 
+def create_data(app, db):
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+
+
 app = create_app(Config())
 app.debug = True
 
